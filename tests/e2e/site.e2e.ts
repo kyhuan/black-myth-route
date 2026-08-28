@@ -40,13 +40,15 @@ test('mobile layout has no horizontal overflow and menu opens', async ({ page })
   await expect(page.locator('[data-language-switch]')).toBeVisible();
 });
 
-test('loads privacy-enhanced YouTube only after the player is clicked', async ({ page }) => {
+test('loads YouTube only after a click and keeps a direct fallback link', async ({ page }) => {
   await page.goto('/zh-cn/wukong/bosses/yellow-wind-sage/');
   const guide = page.locator('[data-video-guide]');
   await expect(guide).toContainText('先看懂，再上手');
   await expect(guide.locator('iframe')).toHaveCount(0);
+  await expect(guide.getByRole('link', { name: /直接在 YouTube 观看/ })).toHaveAttribute('href', 'https://www.youtube.com/watch?v=tG9jPwODbG4');
   await guide.locator('[data-video-play]').click();
-  await expect(guide.locator('iframe')).toHaveAttribute('src', /youtube-nocookie\.com\/embed\/tG9jPwODbG4/);
+  await expect(guide.locator('iframe')).toHaveAttribute('src', /youtube\.com\/embed\/tG9jPwODbG4/);
+  await expect(guide.locator('iframe')).toHaveAttribute('src', /origin=http%3A%2F%2F127\.0\.0\.1%3A4321/);
   await expect(guide.getByRole('link', { name: /完整实战/ })).toHaveAttribute('href', /t=410s/);
 });
 

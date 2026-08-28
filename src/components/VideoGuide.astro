@@ -22,16 +22,22 @@ const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}:${String(se
     <span class="video-source">YouTube · {video.creator}</span>
   </div>
 
-  <button class="video-poster" type="button" data-video-play aria-label={isZh ? `播放 ${video.title}` : `Play ${video.title}`}>
-    <span class="video-ink-mark" aria-hidden="true">影</span>
-    <span class="video-play-mark" aria-hidden="true">
-      <svg viewBox="0 0 64 64" role="img"><path d="M25 18 47 32 25 46V18Z" fill="currentColor" /></svg>
-    </span>
-    <span class="video-poster-copy">
-      <small>{isZh ? '点击后加载 YouTube' : 'YouTube loads after your click'}</small>
-      <strong>{video.title}</strong>
-    </span>
-  </button>
+  <div class="video-player-shell">
+    <button class="video-poster" type="button" data-video-play aria-label={isZh ? `播放 ${video.title}` : `Play ${video.title}`}>
+      <span class="video-ink-mark" aria-hidden="true">影</span>
+      <span class="video-play-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" role="img"><path d="M25 18 47 32 25 46V18Z" fill="currentColor" /></svg>
+      </span>
+      <span class="video-poster-copy">
+        <small>{isZh ? '点击后加载 YouTube' : 'YouTube loads after your click'}</small>
+        <strong>{video.title}</strong>
+      </span>
+    </button>
+  </div>
+  <div class="video-player-actions">
+    <span>{isZh ? '登录验证无法返回播放器？' : 'Sign-in did not return to the player?'}</span>
+    <a href={watchUrl} target="_blank" rel="noopener noreferrer">{isZh ? '直接在 YouTube 观看 ↗' : 'Watch directly on YouTube ↗'}</a>
+  </div>
 
   <div class="video-guide-copy">
     <p>{video.focus[lang]}</p>
@@ -62,7 +68,9 @@ const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}:${String(se
 
     button.addEventListener('click', () => {
       const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0`;
+      const origin = encodeURIComponent(window.location.origin);
+      const referrer = encodeURIComponent(window.location.href);
+      iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&playsinline=1&origin=${origin}&widget_referrer=${referrer}`;
       iframe.title = button.getAttribute('aria-label') || 'YouTube video guide';
       iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
       iframe.referrerPolicy = 'strict-origin-when-cross-origin';
