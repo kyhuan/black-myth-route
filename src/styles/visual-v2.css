@@ -204,7 +204,124 @@
   .boss-card::after, .build-card::after { content: ''; position: absolute; inset: 0 0 auto; height: 2px; background: linear-gradient(90deg, var(--cinnabar-500), transparent 65%); opacity: .55; }
   .boss-card:hover, .build-card:hover { border-color: rgba(201,168,106,.55); transform: translateY(-4px); }
   .boss-card h2, .build-card h2 { color: var(--paper-50); }
+  .card-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .video-badge { display: inline-flex; align-items: center; gap: 5px; color: var(--gold-400); font-size: .68rem; letter-spacing: .07em; text-transform: uppercase; }
+  .video-badge span { color: var(--cinnabar-300); font-size: .56rem; }
   .difficulty i { border-radius: 0; transform: skewX(-13deg); }
+
+  .video-guide {
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,106,.22);
+    background: linear-gradient(145deg, rgba(22,23,19,.97), rgba(8,9,8,.98));
+    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+  }
+  .video-guide-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 24px 26px 20px;
+    border-bottom: 1px solid rgba(201,168,106,.13);
+  }
+  .video-guide-heading h2 { margin: 5px 0 0; color: var(--paper-50); }
+  .video-source {
+    flex: none;
+    color: var(--gold-400);
+    font-size: .72rem;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+  }
+  .video-poster {
+    position: relative;
+    display: grid;
+    width: 100%;
+    aspect-ratio: 16 / 8.3;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid rgba(201,168,106,.13);
+    color: var(--paper-50);
+    cursor: pointer;
+    text-align: left;
+    background:
+      linear-gradient(90deg, rgba(6,7,6,.95) 0%, rgba(6,7,6,.64) 47%, rgba(6,7,6,.13) 79%),
+      linear-gradient(0deg, rgba(6,7,6,.8), transparent 55%),
+      url('/images/hero-monkey-pilgrim-v2.webp') 67% 40% / cover;
+  }
+  .video-poster::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 73% 42%, transparent 0 18%, rgba(5,6,5,.12) 45%, rgba(5,6,5,.35));
+    transition: background .25s ease;
+  }
+  .video-poster:hover::after { background: radial-gradient(circle at 73% 42%, rgba(184,58,40,.12), rgba(5,6,5,.23) 54%, rgba(5,6,5,.46)); }
+  .video-poster:focus-visible { outline: 2px solid var(--cinnabar-400); outline-offset: -4px; }
+  .video-poster iframe, .video-guide iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-bottom: 1px solid rgba(201,168,106,.13);
+    background: #050605;
+  }
+  .video-play-mark {
+    position: absolute;
+    z-index: 2;
+    left: 26px;
+    top: 28px;
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    color: var(--paper-50);
+    border: 1px solid rgba(229,214,180,.48);
+    background: rgba(184,58,40,.88);
+    transform: rotate(45deg);
+    transition: transform .2s ease, background .2s ease;
+  }
+  .video-play-mark svg { width: 29px; transform: rotate(-45deg); }
+  .video-poster:hover .video-play-mark { background: var(--cinnabar-400); transform: rotate(45deg) scale(1.06); }
+  .video-poster-copy {
+    position: relative;
+    z-index: 2;
+    align-self: end;
+    display: grid;
+    gap: 8px;
+    max-width: 68%;
+    padding: 28px 26px;
+  }
+  .video-poster-copy small { color: var(--gold-400); font-size: .72rem; letter-spacing: .11em; text-transform: uppercase; }
+  .video-poster-copy strong { font-family: var(--serif); font-size: clamp(1.25rem, 2.6vw, 2rem); line-height: 1.12; }
+  .video-ink-mark {
+    position: absolute;
+    z-index: 1;
+    right: 5%;
+    bottom: -12%;
+    color: rgba(229,214,180,.08);
+    font-family: var(--serif);
+    font-size: clamp(8rem, 22vw, 15rem);
+    line-height: 1;
+  }
+  .video-guide-copy { padding: 24px 26px 26px; }
+  .video-guide-copy > p:first-child { margin: 0; color: var(--paper-100); font-size: 1.03rem; }
+  .video-chapters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .video-chapters a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 11px;
+    color: var(--paper-200);
+    border: 1px solid rgba(201,168,106,.2);
+    background: rgba(201,168,106,.045);
+    font-size: .82rem;
+  }
+  .video-chapters a:hover { color: var(--paper-50); border-color: rgba(201,168,106,.5); }
+  .video-chapters span { color: var(--cinnabar-300); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .video-attribution { display: flex; flex-wrap: wrap; gap: 6px 12px; margin: 18px 0 0; color: var(--muted); font-size: .78rem; }
+  .video-attribution a { color: var(--gold-400); }
+  .video-fallback { margin: 7px 0 0; color: var(--muted); font-size: .78rem; }
 
   .site-footer { position: relative; background: linear-gradient(#090a08, #050605); }
   .site-footer::before { content: '路'; position: absolute; left: 4%; bottom: -34px; color: rgba(201,168,106,.035); font-family: var(--serif); font-size: 14rem; line-height: 1; }
@@ -239,5 +356,9 @@
   .feature-card { min-height: 285px; }
   .feature-card h3 { margin-top: 92px; }
   .page-hero { padding-block: 78px 58px; background-position: 67% center; }
+  .video-guide-heading { align-items: start; flex-direction: column; padding: 20px 18px 17px; }
+  .video-poster { aspect-ratio: 4 / 3; background-position: 70% center; }
+  .video-play-mark { left: 19px; top: 21px; width: 50px; height: 50px; }
+  .video-poster-copy { max-width: 88%; padding: 22px 18px; }
+  .video-guide-copy { padding: 20px 18px 22px; }
 }
-

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import VideoGuide from '@/components/VideoGuide.astro';
 import type { Boss } from '@/data/bosses';
 import { localizePath, siteUrl, type Lang } from '@/lib/i18n';
 interface Props { lang: Lang; boss: Boss; }
@@ -34,13 +35,14 @@ const jsonLd = {
   <section class="section shell detail-grid">
     <article class="detail-content">
       <div class="warning-box"><strong>{isZh ? '一句话解法：' : 'The short answer: '}</strong>{boss.summary[lang]}</div>
+      {boss.video && <VideoGuide lang={lang} video={boss.video} />}
       <section class="detail-section">
-        <p class="eyebrow">01 · PREP</p>
+        <p class="eyebrow">01 · PREPARE</p>
         <h2>{isZh ? '开打前准备' : 'Before the attempt'}</h2>
         <ul>{boss.prep[lang].map((item) => <li>{item}</li>)}</ul>
       </section>
       <section class="detail-section">
-        <p class="eyebrow">02 · RULES</p>
+        <p class="eyebrow">02 · READ</p>
         <h2>{isZh ? '三条核心规则' : 'Three rules that solve the fight'}</h2>
         <ol class="numbered-list">{boss.rules[lang].map((item) => <li>{item}</li>)}</ol>
       </section>

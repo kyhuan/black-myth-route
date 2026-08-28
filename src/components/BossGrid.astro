@@ -12,7 +12,10 @@ const chapterMarks = isZh ? ['','壹','贰','叁','肆','伍','陆'] : ['','I','
   {list.map((boss) => (
     <a class="boss-card" data-chapter-mark={chapterMarks[boss.chapter]} href={localizePath(`/wukong/bosses/${boss.slug}/`, lang)}>
       <div class="card-top">
-        <span class="card-chapter">{isZh ? `第 ${boss.chapter} 回` : `Chapter ${boss.chapter}`}</span>
+        <div class="card-meta-row">
+          <span class="card-chapter">{isZh ? `第 ${boss.chapter} 回` : `Chapter ${boss.chapter}`}</span>
+          {boss.video && <span class="video-badge"><span aria-hidden="true">▶</span> {isZh ? '含视频演示' : 'Video guide'}</span>}
+        </div>
         <h2>{boss.name[lang]}</h2>
         <p>{boss.epithet[lang]}</p>
       </div>

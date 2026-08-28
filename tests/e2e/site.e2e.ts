@@ -40,6 +40,16 @@ test('mobile layout has no horizontal overflow and menu opens', async ({ page })
   await expect(page.locator('[data-language-switch]')).toBeVisible();
 });
 
+test('loads privacy-enhanced YouTube only after the player is clicked', async ({ page }) => {
+  await page.goto('/zh-cn/wukong/bosses/yellow-wind-sage/');
+  const guide = page.locator('[data-video-guide]');
+  await expect(guide).toContainText('先看懂，再上手');
+  await expect(guide.locator('iframe')).toHaveCount(0);
+  await guide.locator('[data-video-play]').click();
+  await expect(guide.locator('iframe')).toHaveAttribute('src', /youtube-nocookie\.com\/embed\/tG9jPwODbG4/);
+  await expect(guide.getByRole('link', { name: /完整实战/ })).toHaveAttribute('href', /t=410s/);
+});
+
 test('sitemap routes resolve and pages expose bilingual alternates', async ({ page, request }) => {
   const sitemap = await request.get('/sitemap.xml');
   expect(sitemap.ok()).toBe(true);

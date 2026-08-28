@@ -1,0 +1,74 @@
+---
+import type { BossVideo } from '@/data/bosses';
+import type { Lang } from '@/lib/i18n';
+
+interface Props {
+  lang: Lang;
+  video: BossVideo;
+}
+
+const { lang, video } = Astro.props;
+const isZh = lang === 'zh-cn';
+const watchUrl = `https://www.youtube.com/watch?v=${video.youtubeId}`;
+const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+---
+
+<section class="detail-section video-guide" data-video-guide data-video-id={video.youtubeId}>
+  <div class="video-guide-heading">
+    <div>
+      <p class="eyebrow">00 · FIELD DEMONSTRATION</p>
+      <h2>{isZh ? '视频演示：先看懂，再上手' : 'Watch the timing, then try it'}</h2>
+    </div>
+    <span class="video-source">YouTube · {video.creator}</span>
+  </div>
+
+  <button class="video-poster" type="button" data-video-play aria-label={isZh ? `播放 ${video.title}` : `Play ${video.title}`}>
+    <span class="video-ink-mark" aria-hidden="true">影</span>
+    <span class="video-play-mark" aria-hidden="true">
+      <svg viewBox="0 0 64 64" role="img"><path d="M25 18 47 32 25 46V18Z" fill="currentColor" /></svg>
+    </span>
+    <span class="video-poster-copy">
+      <small>{isZh ? '点击后加载 YouTube' : 'YouTube loads after your click'}</small>
+      <strong>{video.title}</strong>
+    </span>
+  </button>
+
+  <div class="video-guide-copy">
+    <p>{video.focus[lang]}</p>
+    {video.chapters && (
+      <nav class="video-chapters" aria-label={isZh ? '视频时间点' : 'Video chapters'}>
+        {video.chapters.map((chapter) => (
+          <a href={`${watchUrl}&t=${chapter.seconds}s`} target="_blank" rel="noopener noreferrer">
+            <span>{formatTime(chapter.seconds)}</span> {chapter.label[lang]}
+          </a>
+        ))}
+      </nav>
+    )}
+    <p class="video-attribution">
+      {isZh ? '视频版权归原作者所有。' : 'Video belongs to its creator.'}
+      <a href={watchUrl} target="_blank" rel="noopener noreferrer">{isZh ? '在 YouTube 打开原视频 ↗' : 'Open the original on YouTube ↗'}</a>
+    </p>
+    <p class="video-fallback">{isZh ? 'YouTube 无法访问？下方文字攻略仍包含完成战斗所需的准备、规则和输出窗口。' : 'Cannot access YouTube? The written preparation, rules, and punish windows below remain a complete standalone guide.'}</p>
+  </div>
+</section>
+
+<script is:inline>
+  document.querySelectorAll('[data-video-guide]').forEach((guide) => {
+    if (!(guide instanceof HTMLElement) || guide.dataset.videoReady === 'true') return;
+    guide.dataset.videoReady = 'true';
+    const button = guide.querySelector('[data-video-play]');
+    const videoId = guide.dataset.videoId;
+    if (!(button instanceof HTMLButtonElement) || !videoId) return;
+
+    button.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0`;
+      iframe.title = button.getAttribute('aria-label') || 'YouTube video guide';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.allowFullscreen = true;
+      iframe.loading = 'lazy';
+      button.replaceWith(iframe);
+    }, { once: true });
+  });
+</script>

@@ -1,5 +1,16 @@
 import type { Lang } from '@/lib/i18n';
 
+export interface BossVideo {
+  youtubeId: string;
+  title: string;
+  creator: string;
+  focus: Record<Lang, string>;
+  chapters?: Array<{
+    seconds: number;
+    label: Record<Lang, string>;
+  }>;
+}
+
 export interface Boss {
   slug: string;
   chapter: number;
@@ -13,6 +24,7 @@ export interface Boss {
   punish: Record<Lang, string[]>;
   mistakes: Record<Lang, string[]>;
   tags: Record<Lang, string[]>;
+  video?: BossVideo;
 }
 
 export const bosses: Boss[] = [
@@ -36,7 +48,18 @@ export const bosses: Boss[] = [
     rules: { en: ['Circle at medium range to make thrusts readable.', 'Save Immobilize for a confirmed end of string.', 'In phase two, dodge through the water dash.'], 'zh-cn': ['保持中距离绕行，更容易看清突刺。', '确认连段结束后再交定身。', '二阶段水面突进时迎着攻击闪避。'] },
     punish: { en: ['After the multi-thrust finisher.', 'After the long water dash.', 'During Red Tides burn buildup.'], 'zh-cn': ['多段突刺收招后。', '长距离水面突进后。', '赤潮叠加燃烧期间。'] },
     mistakes: { en: ['Using all gourds in phase one.', 'Chasing him across the arena.', 'Charging heavy attacks without a stagger.'], 'zh-cn': ['一阶段用光葫芦。', '满场追着他跑。', '没有硬直就原地蓄重棍。'] },
-    tags: { en: ['two phase', 'spear', 'story'], 'zh-cn': ['双阶段', '枪', '主线'] }
+    tags: { en: ['two phase', 'spear', 'story'], 'zh-cn': ['双阶段', '枪', '主线'] },
+    video: {
+      youtubeId: 'DuDWP0I8YeY',
+      title: 'How to Beat the Whiteclad Noble - Black Myth Wukong Boss Guide',
+      creator: 'Tenkiei',
+      focus: { en: 'Use the move-set section to learn which spear finishers are truly over, then compare your resource use with the uninterrupted fight.', 'zh-cn': '先看招式拆解，辨认哪些枪术连段才算真正结束；再用完整实战对照自己两阶段的葫芦与法力分配。' },
+      chapters: [
+        { seconds: 0, label: { en: 'Preparation', 'zh-cn': '战前准备' } },
+        { seconds: 114, label: { en: 'Move set', 'zh-cn': '招式拆解' } },
+        { seconds: 437, label: { en: 'Full fight', 'zh-cn': '完整实战' } }
+      ]
+    }
   },
   {
     slug: 'black-bear-guai', chapter: 1, difficulty: 3,
@@ -58,7 +81,13 @@ export const bosses: Boss[] = [
     rules: { en: ['Delay the dodge after his obvious wind-ups.', 'Two light attacks, then reassess.', 'Cloud Step can reset the stone feint sequence.'], 'zh-cn': ['看到明显蓄势后延迟闪避。', '轻击两下就重新观察。', '石化假动作可用聚形散气重置节奏。'] },
     punish: { en: ['End of the five-hit sword chain.', 'Missed leap into the blood pool.', 'Roar recovery at medium range.'], 'zh-cn': ['五连刀完整结束后。', '跳劈落空之后。', '中距离咆哮收招时。'] },
     mistakes: { en: ['Button mashing after two hits.', 'Rolling on the wind-up.', 'Healing directly in front of him.'], 'zh-cn': ['打两下后继续贪刀。', '起手蓄势时立刻翻滚。', '正面直接喝葫芦。'] },
-    tags: { en: ['melee', 'delayed attacks', 'skill check'], 'zh-cn': ['近战', '延迟攻击', '基本功'] }
+    tags: { en: ['melee', 'delayed attacks', 'skill check'], 'zh-cn': ['近战', '延迟攻击', '基本功'] },
+    video: {
+      youtubeId: 'Tkp7bietm_Q',
+      title: 'How to Beat the Tiger Vanguard - Black Myth Wukong Boss Guide',
+      creator: 'Tenkiei',
+      focus: { en: 'Watch the shoulder and body cues around the delayed sword strings; the goal is to copy the dodge rhythm, not the exact build.', 'zh-cn': '重点看延迟刀连段前的肩部与身体信号；要学的是闪避节奏，不必照抄视频里的整套构筑。' }
+    }
   },
   {
     slug: 'yellow-wind-sage', chapter: 2, difficulty: 4,
@@ -69,7 +98,18 @@ export const bosses: Boss[] = [
     rules: { en: ['Fight near center before the arena boundary closes.', 'Save the vessel for the tornado/wind sequence.', 'Dodge the kick slightly later than instinct suggests.'], 'zh-cn': ['场地缩小前尽量在中心区域作战。', '把定风珠留给龙卷风与狂风阶段。', '踢击的闪避时机要比直觉稍晚。'] },
     punish: { en: ['After the trident ground combo.', 'Immediately after Wind Tamer staggers him.', 'After his long kick chain.'], 'zh-cn': ['三股钢叉砸地连段后。', '定风珠打断并造成硬直时。', '长踢击连段结束后。'] },
     mistakes: { en: ['Entering without Wind Tamer.', 'Getting trapped at the invisible edge.', 'Spending all mana before the final phase.'], 'zh-cn': ['没有定风珠就直接开战。', '被挤在隐形场地边缘。', '终盘前耗尽法力。'] },
-    tags: { en: ['wind', 'chapter finale', 'vessel'], 'zh-cn': ['风', '章节最终战', '法宝'] }
+    tags: { en: ['wind', 'chapter finale', 'vessel'], 'zh-cn': ['风', '章节最终战', '法宝'] },
+    video: {
+      youtubeId: 'tG9jPwODbG4',
+      title: 'How to Beat the Yellow Wind Sage - Black Myth Wukong Boss Guide',
+      creator: 'Tenkiei',
+      focus: { en: 'Compare the preparation section with your loadout, then jump to the battle to see exactly when Wind Tamer turns the dangerous wind phase.', 'zh-cn': '先对照准备部分检查装备，再看完整实战中定风珠应在何时打断最危险的风沙阶段。' },
+      chapters: [
+        { seconds: 0, label: { en: 'Preparation', 'zh-cn': '战前准备' } },
+        { seconds: 146, label: { en: 'Move set', 'zh-cn': '招式拆解' } },
+        { seconds: 410, label: { en: 'Battle', 'zh-cn': '完整实战' } }
+      ]
+    }
   },
   {
     slug: 'yellowbrow', chapter: 3, difficulty: 4,
@@ -80,7 +120,13 @@ export const bosses: Boss[] = [
     rules: { en: ['Use charged heavy attacks against gold form.', 'Do not spam Immobilize into his counter state.', 'Treat every transition as a resource checkpoint.'], 'zh-cn': ['金身状态用蓄力重击处理。', '反制定身时不要继续乱交法术。', '每次转场都视作一次资源检查点。'] },
     punish: { en: ['After breaking gold form.', 'Recovery from the long mace slam.', 'Spell Binder windows with full stamina.'], 'zh-cn': ['打破金身后。', '长前摇狼牙棒砸地后。', '禁字法状态且体力充足时。'] },
     mistakes: { en: ['Casting the same spell into counters.', 'Arriving at later phases empty.', 'Ignoring the gold-state mechanic.'], 'zh-cn': ['明知会被反制仍重复施法。', '进入后续阶段时资源见底。', '无视金身机制硬刮。'] },
-    tags: { en: ['lightning', 'multi stage', 'anti-spell'], 'zh-cn': ['雷蛰', '多阶段', '反法术'] }
+    tags: { en: ['lightning', 'multi stage', 'anti-spell'], 'zh-cn': ['雷蛰', '多阶段', '反法术'] },
+    video: {
+      youtubeId: 'GP898ukiBtc',
+      title: 'How to Beat Yellowbrow & the Macaque Chief - Black Myth Wukong Boss Guide',
+      creator: 'Tenkiei',
+      focus: { en: 'Use the run to understand the transitions between Yellowbrow and Macaque Chief, and where the guide saves resources for the gold-state finale.', 'zh-cn': '重点理解黄眉与赤尻马猴之间的连续转场，以及作者如何把资源留给金身更频繁的终盘。' }
+    }
   },
   {
     slug: 'cyan-loong', chapter: 3, difficulty: 4,
@@ -102,7 +148,13 @@ export const bosses: Boss[] = [
     rules: { en: ['Count the chain; do not assume it ended.', 'Back away when his weapon glows with extended range.', 'Take one strong punish, then reset.'], 'zh-cn': ['数清连段，别凭感觉判断结束。', '武器发光并延长时先后撤。', '每个窗口打一轮高质量输出就重置。'] },
     punish: { en: ['Final landing of the aerial sequence.', 'Missed forward lightning thrust.', 'Cloud Step reveal after he commits.'], 'zh-cn': ['空中连段最后落地时。', '雷电前突落空后。', '他已出招后用聚形散气显形反击。'] },
     mistakes: { en: ['Assuming the third hit is the last.', 'Healing at neutral range.', 'Using all mana in the opening minute.'], 'zh-cn': ['误以为第三击就是收招。', '在双方中立距离直接喝药。', '开场一分钟内耗光法力。'] },
-    tags: { en: ['loong', 'lightning', 'optional'], 'zh-cn': ['龙', '雷蛰', '可选'] }
+    tags: { en: ['loong', 'lightning', 'optional'], 'zh-cn': ['龙', '雷蛰', '可选'] },
+    video: {
+      youtubeId: 'dvpVf_v94Lg',
+      title: 'How to Find & Beat Yellow Loong - Black Myth Wukong Boss Guide',
+      creator: 'Tenkiei',
+      focus: { en: 'The video covers both the route to the arena and the delayed lightning chains. Watch one full chain before trying to memorize any punish.', 'zh-cn': '视频同时覆盖到达战场的路线和延迟雷电连段；先完整观察一套连招，再记稳定输出窗。' }
+    }
   },
   {
     slug: 'hundred-eyed-daoist-master', chapter: 4, difficulty: 5,
@@ -124,7 +176,16 @@ export const bosses: Boss[] = [
     rules: { en: ['Spend minimal resources in phase one.', 'Stay under or beside long-range blade waves.', 'Reset when the camera loses the boss.'], 'zh-cn': ['一阶段尽量少耗资源。', '远距离刀波时贴近其身下或侧面。', '镜头丢失目标就优先重置站位。'] },
     punish: { en: ['End of the beak slam chain.', 'Landing after aerial blade wave.', 'A stagger early in phase two.'], 'zh-cn': ['喙部砸击连段后。', '空中刀波落地后。', '二阶段早期制造硬直时。'] },
     mistakes: { en: ['Burning all mana in phase one.', 'Running far enough to make projectiles harder.', 'Entering before side quests are resolved.'], 'zh-cn': ['一阶段用光法力。', '跑得太远反而让投射物更难躲。', '支线未收尾就进入战场。'] },
-    tags: { en: ['two phase', 'secret area', 'vessel reward'], 'zh-cn': ['双阶段', '隐藏区域', '法宝奖励'] }
+    tags: { en: ['two phase', 'secret area', 'vessel reward'], 'zh-cn': ['双阶段', '隐藏区域', '法宝奖励'] },
+    video: {
+      youtubeId: 'LD_ue5WS2oQ',
+      title: "How to Beat Duskveil & Find the Weaver's Needle Vessel - Black Myth Wukong Guide",
+      creator: 'Tenkiei',
+      focus: { en: 'Use this when you need the secret-area route as well as phase-two spacing. The Duskveil tips begin at 09:02.', 'zh-cn': '适合同时确认紫云山隐藏路线与二阶段站位；晦月魔君的实战提示从 09:02 开始。' },
+      chapters: [
+        { seconds: 542, label: { en: 'Duskveil tips', 'zh-cn': 'Boss 实战要点' } }
+      ]
+    }
   },
   {
     slug: 'bishui-golden-eyed-beast', chapter: 5, difficulty: 4,
@@ -179,11 +240,20 @@ export const bosses: Boss[] = [
     rules: { en: ['Heal after spacing or Cloud Step, never raw.', 'Expect stance counters and varied timing.', 'Use four-focus attacks only on confirmed openings.'], 'zh-cn': ['拉开距离或聚形散气后再喝药。', '预期不同棍势会被针对，且节奏多变。', '四段棍势只在确认窗口释放。'] },
     punish: { en: ['End of the long staff chain.', 'After a missed charged strike.', 'Cloud Step heavy when he commits elsewhere.'], 'zh-cn': ['长棍连段完整结束后。', '蓄力重击落空后。', '对方已出招时用聚形散气重击。'] },
     mistakes: { en: ['Healing in his face.', 'Repeating the same opener.', 'Greeding because the health bar is nearly empty.'], 'zh-cn': ['贴脸喝药。', '重复使用同一种起手。', '残血时因为着急而贪刀。'] },
-    tags: { en: ['finale', 'multi phase', 'staff'], 'zh-cn': ['最终战', '多阶段', '棍法'] }
+    tags: { en: ['finale', 'multi phase', 'staff'], 'zh-cn': ['最终战', '多阶段', '棍法'] },
+    video: {
+      youtubeId: 'iafhPZUxMw4',
+      title: "How to Beat Stone Monkey & Great Sages Broken Shell Easy Guide - Final Boss | Black Myth Wukong",
+      creator: 'Saboteur',
+      focus: { en: 'This later-patch guide shows the entire final sequence. Jump to 04:27 for the Broken Shell and compare its safe heal windows with the written rules below.', 'zh-cn': '这条后续版本攻略展示了完整终战；跳到 04:27 直接看大圣残躯，并与下方文字中的安全喝药窗口对照。' },
+      chapters: [
+        { seconds: 0, label: { en: 'Stone Monkey', 'zh-cn': '石猿' } },
+        { seconds: 267, label: { en: "Great Sage's Broken Shell", 'zh-cn': '大圣残躯' } }
+      ]
+    }
   }
 ];
 
 export function getBoss(slug: string) {
   return bosses.find((boss) => boss.slug === slug);
 }
-
