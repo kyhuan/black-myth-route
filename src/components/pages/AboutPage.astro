@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { localizePath, type Lang } from '@/lib/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+---
+
+<BaseLayout title={isZh ? '关于本站' : 'About'} description={isZh ? '了解 Black Myth Route 的产品原则、数据策略和非官方定位。' : 'Learn the product principles, data approach, and unofficial status of Black Myth Route.'}>
+  <header class="page-hero"><div class="shell"><p class="eyebrow">BLACK MYTH ROUTE</p><h1 class="page-title">{isZh ? '一条更清楚的天命之路。' : 'A clearer route through destiny.'}</h1><p class="lede">{isZh ? '我们做的是决策工具：帮助玩家继续推进，而不是复制一本更大的百科。' : 'We build a decision tool that helps players move forward—not a larger encyclopedia to browse.'}</p></div></header>
+  <section class="section shell legal-copy">
+    <section><h2>{isZh ? '为什么做本站' : 'Why this exists'}</h2><p>{isZh ? '攻略内容很多，但玩家卡住时通常只有三个问题：下一步去哪、有没有漏、这个 Boss 到底该怎么处理。Black Myth Route 把答案压缩到一条路线和一组可执行规则。' : 'Guides are abundant, yet stuck players usually ask only three things: where next, what did I miss, and how do I solve this boss? Black Myth Route compresses those answers into one route and executable rules.'}</p></section>
+    <section><h2>{isZh ? '内容原则' : 'Content principles'}</h2><ul><li>{isZh ? '答案优先，背景解释随后。' : 'Answer first, context second.'}</li><li>{isZh ? '默认保护剧情关键内容。' : 'Protect major story beats by default.'}</li><li>{isZh ? '明确标记易错过、版本敏感和主观判断。' : 'Label missables, patch-sensitive facts, and judgment calls.'}</li><li>{isZh ? '中英文使用同一数据结构，避免两套内容漂移。' : 'English and Chinese share one data model to prevent content drift.'}</li></ul></section>
+    <section><h2>{isZh ? '数据与隐私' : 'Data and privacy'}</h2><p>{isZh ? '本站不需要账号，不读取游戏存档。你的清单只保存在当前浏览器的 localStorage，除非你主动导出 JSON 文件。' : 'The site requires no account and never reads game saves. Your checklist lives in browser localStorage unless you explicitly export a JSON file.'}</p></section>
+    <section><h2>{isZh ? '纠错与反馈' : 'Corrections and feedback'}</h2><p>{isZh ? <>发现错误时，可以在项目 GitHub 仓库提交 issue。正式仓库链接会在首次公开发布后补充。</> : <>If you find an error, you can file an issue in the project GitHub repository. The repository link will be added at public launch.</>}</p></section>
+    <a class="button secondary" href={localizePath('/disclaimer/', lang)}>{isZh ? '阅读免责声明' : 'Read the disclaimer'} →</a>
+  </section>
+</BaseLayout>
+

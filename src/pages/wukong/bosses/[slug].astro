@@ -1,0 +1,8 @@
+---
+import BossDetailPage from '@/components/pages/BossDetailPage.astro';
+import { bosses } from '@/data/bosses';
+export function getStaticPaths() { return bosses.map((boss) => ({ params: { slug: boss.slug }, props: { boss } })); }
+const { boss } = Astro.props;
+---
+<BossDetailPage lang="en" boss={boss} />
+

@@ -1,0 +1,56 @@
+---
+import { localizePath, t, type Lang } from '@/lib/i18n';
+
+interface Props { lang: Lang; pathname: string; }
+const { lang, pathname } = Astro.props;
+const copy = t(lang);
+const otherLang: Lang = lang === 'en' ? 'zh-cn' : 'en';
+const switchPath = localizePath(pathname, otherLang);
+const route = (path: string) => localizePath(path, lang);
+const activePath = pathname.replace(/\/$/, '') || '/';
+const isActive = (path: string) => {
+  const localized = route(path).replace(/\/$/, '') || '/';
+  return activePath === localized || (path !== '/' && activePath.startsWith(localized));
+};
+---
+
+<header class="site-header">
+  <nav class="nav-shell" aria-label={lang === 'zh-cn' ? '主导航' : 'Primary navigation'}>
+    <a class="brand" href={route('/')} aria-label={lang === 'zh-cn' ? 'Black Myth Route 首页' : 'Black Myth Route home'}>
+      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path d="M11 26c4-1 6-4 7-9 2 4 5 6 11 7M14 13c3 1 5 3 6 7 2-4 4-6 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+      </svg>
+      <span class="brand-word">Black Myth <span>Route</span></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label={copy.openMenu}>
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" /></svg>
+    </button>
+    <ul class="nav-links" id="nav-links" data-nav-links>
+      <li><a href={route('/wukong/checklist/')} aria-current={isActive('/wukong/checklist/') ? 'page' : undefined}>{copy.navTracker}</a></li>
+      <li><a href={route('/wukong/bosses/')} aria-current={isActive('/wukong/bosses/') ? 'page' : undefined}>{copy.navBosses}</a></li>
+      <li><a href={route('/wukong/builds/')} aria-current={isActive('/wukong/builds/') ? 'page' : undefined}>{copy.navBuilds}</a></li>
+      <li><a href={route('/about/')} aria-current={isActive('/about/') ? 'page' : undefined}>{copy.navAbout}</a></li>
+      <li><a class="lang-switch" href={switchPath} hreflang={otherLang === 'zh-cn' ? 'zh-CN' : 'en'} data-language-switch data-locale={otherLang}>{copy.switchLanguage}</a></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const menuButton = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const navLinks = document.querySelector<HTMLElement>('[data-nav-links]');
+  menuButton?.addEventListener('click', () => {
+    const open = menuButton.getAttribute('aria-expanded') !== 'true';
+    menuButton.setAttribute('aria-expanded', String(open));
+    navLinks?.setAttribute('data-open', String(open));
+  });
+
+  document.querySelector<HTMLAnchorElement>('[data-language-switch]')?.addEventListener('click', (event) => {
+    const link = event.currentTarget as HTMLAnchorElement;
+    const locale = link.dataset.locale;
+    try { if (locale) localStorage.setItem('bmr:locale', locale); } catch {}
+    event.preventDefault();
+    location.assign(link.href + location.search + location.hash);
+  });
+</script>
+

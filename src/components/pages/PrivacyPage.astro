@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import type { Lang } from '@/lib/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+---
+
+<BaseLayout title={isZh ? '隐私说明' : 'Privacy'} description={isZh ? 'Black Myth Route 隐私说明。' : 'Privacy information for Black Myth Route.'}>
+  <header class="page-hero"><div class="shell"><p class="eyebrow">{isZh ? '最后更新：2026 年 8 月 28 日' : 'Last updated: August 28, 2026'}</p><h1 class="page-title">{isZh ? '隐私说明' : 'Privacy'}</h1><p class="lede">{isZh ? '我们尽量少收集数据，并让核心功能在你的设备上完成。' : 'We minimize data collection and keep core functionality on your device.'}</p></div></header>
+  <section class="section shell legal-copy">
+    <section><h2>{isZh ? '本地进度' : 'Local progress'}</h2><p>{isZh ? '清单完成状态、剧透偏好、语言偏好和周目选择存储在浏览器 localStorage 中，不会由本站服务器接收。清除浏览器数据会删除这些内容。' : 'Checklist state, spoiler preference, language preference, and journey selection are stored in browser localStorage. They are not received by our server. Clearing browser data removes them.'}</p></section>
+    <section><h2>{isZh ? '导入与导出' : 'Import and export'}</h2><p>{isZh ? '导出功能会在本机生成 JSON 文件；导入功能只在浏览器中读取你选择的文件。本站不会上传该文件。' : 'Export creates a JSON file on your device. Import reads the file you select inside the browser; it is not uploaded to us.'}</p></section>
+    <section><h2>{isZh ? '基础访问统计' : 'Basic traffic analytics'}</h2><p>{isZh ? '正式上线后可能使用 Plausible 等隐私友好的聚合访问统计，用于了解页面访问量和基础来源，不建立跨站广告画像。若未启用分析脚本，则不会进行此项处理。' : 'After launch we may use privacy-friendly aggregate analytics such as Plausible to understand page traffic and basic referrals, without cross-site advertising profiles. If the analytics script is not enabled, this processing does not occur.'}</p></section>
+    <section><h2>{isZh ? '联系我们' : 'Contact'}</h2><p>{isZh ? '隐私相关问题可通过项目 GitHub issue 提出。联系渠道会在正式发布时更新。' : 'Privacy questions can be raised through the project GitHub issue tracker. Contact details will be updated at public launch.'}</p></section>
+  </section>
+</BaseLayout>
+

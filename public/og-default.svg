@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="sun"><stop stop-color="#dc6548"/><stop offset=".58" stop-color="#8f3023"/><stop offset="1" stop-color="#35140f"/></radialGradient>
+    <linearGradient id="fade" x2="1" y2="1"><stop stop-color="#171714"/><stop offset="1" stop-color="#080807"/></linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#fade)"/>
+  <circle cx="932" cy="168" r="188" fill="url(#sun)" opacity=".88"/>
+  <path d="M0 630V475l300-150 214 160 180-105 506 250z" fill="#11110f" opacity=".92"/>
+  <path d="M0 630V550l266-128 260 152 180-94 494 150z" fill="#080807"/>
+  <g transform="translate(72 72)" fill="none" stroke="#c94833" stroke-width="4"><circle cx="34" cy="34" r="31"/><path d="M17 45c11-3 17-10 19-25 5 11 12 16 25 19M21 16c7 3 12 8 14 19 5-11 10-16 20-19" stroke="#e8dfcc"/></g>
+  <text x="72" y="244" fill="#e8dfcc" font-family="Georgia,serif" font-size="88">Black Myth Route</text>
+  <text x="76" y="310" fill="#bdb29c" font-family="Arial,sans-serif" font-size="31">WUKONG 100% TRACKER · BOSS SOLVER · BUILDS</text>
+  <text x="76" y="510" fill="#d7bb79" font-family="Georgia,serif" font-size="33">Finish the journey. Miss nothing.</text>
+</svg>
+

@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BossGrid from '@/components/BossGrid.astro';
+import { localizePath, type Lang } from '@/lib/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+---
+
+<BaseLayout
+  title={isZh ? '黑神话悟空 Boss 解法' : 'Black Myth: Wukong Boss Solver'}
+  description={isZh ? '黑神话：悟空重点 Boss 速查解法：战前准备、核心规则、输出窗口与常见错误。' : 'Fast Black Myth: Wukong boss solutions with preparation, core rules, punish windows, and common mistakes.'}
+>
+  <header class="page-hero">
+    <div class="shell">
+      <nav class="crumbs" aria-label={isZh ? '面包屑' : 'Breadcrumb'}>
+        <span><a href={localizePath('/', lang)}>{isZh ? '首页' : 'Home'}</a></span><span>{isZh ? 'Boss 解法' : 'Boss Solver'}</span>
+      </nav>
+      <p class="eyebrow">{isZh ? '先给答案，再解释机制' : 'Answer first. Mechanic second.'}</p>
+      <h1 class="page-title">{isZh ? 'Boss 解法库' : 'Boss Solver'}</h1>
+      <p class="lede">{isZh ? '每页都压缩成开打前真正需要的内容。难度是本站相对评估，不代表唯一打法。' : 'Each page is compressed to what matters before another attempt. Difficulty is our relative estimate, never the only valid approach.'}</p>
+    </div>
+  </header>
+  <section class="section-tight shell">
+    <BossGrid lang={lang} />
+  </section>
+</BaseLayout>
+

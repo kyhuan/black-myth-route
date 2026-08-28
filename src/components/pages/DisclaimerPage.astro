@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import type { Lang } from '@/lib/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+---
+
+<BaseLayout title={isZh ? '免责声明' : 'Disclaimer'} description={isZh ? 'Black Myth Route 的非官方定位、知识产权和攻略准确性说明。' : 'Unofficial status, intellectual property, and guide accuracy disclaimer for Black Myth Route.'}>
+  <header class="page-hero"><div class="shell"><p class="eyebrow">{isZh ? '非官方玩家项目' : 'Unofficial fan project'}</p><h1 class="page-title">{isZh ? '免责声明' : 'Disclaimer'}</h1><p class="lede">{isZh ? '清楚说明边界，是尊重作品和玩家的一部分。' : 'Clear boundaries are part of respecting both the work and its players.'}</p></div></header>
+  <section class="section shell legal-copy">
+    <section><h2>{isZh ? '非隶属关系' : 'No affiliation'}</h2><p>{isZh ? 'Black Myth Route 是非官方、玩家制作的辅助工具，与游戏科学不存在隶属、授权、赞助或背书关系。' : 'Black Myth Route is an unofficial, fan-made companion and is not affiliated with, endorsed by, sponsored by, or authorized by Game Science.'}</p></section>
+    <section><h2>{isZh ? '知识产权' : 'Intellectual property'}</h2><p>{isZh ? 'BLACK MYTH、《黑神话：悟空》、相关角色、地点、标识与游戏资产归其各自权利人所有。本站名称中的描述性使用仅用于说明攻略对象，不主张对相关商标或游戏内容的权利。' : 'BLACK MYTH, Black Myth: Wukong, related characters, locations, marks, and game assets belong to their respective owners. Descriptive use in this site name identifies the subject of the guide and does not claim rights in those marks or game content.'}</p></section>
+    <section><h2>{isZh ? '原创呈现' : 'Original presentation'}</h2><p>{isZh ? '本站界面、路线结构与文字解法为独立整理。首版不使用游戏截图、官方标识、解包素材或官方美术作为核心视觉。' : 'The interface, route structure, and written solutions are independently produced. The first release does not use game screenshots, official logos, extracted assets, or official artwork as core visual material.'}</p></section>
+    <section><h2>{isZh ? '准确性与版本变化' : 'Accuracy and patches'}</h2><p>{isZh ? '我们会尽力核对内容，但游戏更新可能改变数值、掉落或机制。本站不保证所有信息在任何版本中都完整无误，也不对依据攻略产生的游戏内结果负责。' : 'We work to verify content, but patches may change numbers, drops, or mechanics. We cannot guarantee every detail is complete or correct in every version and are not responsible for in-game outcomes based on a guide.'}</p></section>
+  </section>
+</BaseLayout>
+

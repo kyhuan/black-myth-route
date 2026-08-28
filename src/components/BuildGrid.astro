@@ -1,0 +1,25 @@
+---
+import { builds } from '@/data/builds';
+import { localizePath, type Lang } from '@/lib/i18n';
+interface Props { lang: Lang; limit?: number; }
+const { lang, limit } = Astro.props;
+const list = typeof limit === 'number' ? builds.slice(0, limit) : builds;
+const isZh = lang === 'zh-cn';
+---
+
+<div class="card-grid">
+  {list.map((build) => (
+    <a class="build-card" href={localizePath(`/wukong/builds/${build.slug}/`, lang)}>
+      <div class="card-top">
+        <span class="card-chapter">{build.eyebrow[lang]}</span>
+        <h2>{build.title[lang]}</h2>
+        <p>{build.summary[lang]}</p>
+      </div>
+      <div class="card-bottom">
+        <span class="pill">{build.cycle === 'first' ? (isZh ? '首周目' : 'First journey') : build.cycle === 'ng+' ? (isZh ? '再入轮回' : 'New Cycle') : (isZh ? '全周目' : 'Any journey')}</span>
+        <span class="arrow-link">{isZh ? '打开构筑' : 'Open build'} →</span>
+      </div>
+    </a>
+  ))}
+</div>
+

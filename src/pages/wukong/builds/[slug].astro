@@ -1,0 +1,8 @@
+---
+import BuildDetailPage from '@/components/pages/BuildDetailPage.astro';
+import { builds } from '@/data/builds';
+export function getStaticPaths() { return builds.map((build) => ({ params: { slug: build.slug }, props: { build } })); }
+const { build } = Astro.props;
+---
+<BuildDetailPage lang="en" build={build} />
+

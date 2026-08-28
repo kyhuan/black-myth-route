@@ -1,0 +1,124 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import RouteStarter from '@/components/RouteStarter.astro';
+import BossGrid from '@/components/BossGrid.astro';
+import BuildGrid from '@/components/BuildGrid.astro';
+import { localizePath, siteUrl, type Lang } from '@/lib/i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+const route = (path: string) => localizePath(path, lang);
+const description = isZh
+  ? '黑神话：悟空非官方全收集路线规划工具。追踪易错过内容、快速解决 Boss，并在中英文之间无缝切换。'
+  : 'An unofficial Black Myth: Wukong 100% route planner. Track missables, solve bosses fast, and keep your journey spoiler-safe.';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Black Myth Route',
+  url: siteUrl,
+  inLanguage: ['en', 'zh-CN'],
+  description
+};
+---
+
+<BaseLayout description={description}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <section class="hero">
+    <div class="shell hero-content">
+      <p class="eyebrow">{isZh ? '黑神话：悟空 · 非官方路线工具' : 'Black Myth: Wukong · Unofficial route companion'}</p>
+      <h1 class="display">
+        {isZh ? <>走完天命，<br/><em>不漏一程。</em></> : <>Finish the journey.<br/><em>Miss nothing.</em></>}
+      </h1>
+      <p class="lede">
+        {isZh
+          ? '比百科更聚焦，比视频更快。用一条可执行路线完成收集，在卡关时只看真正有用的解法。'
+          : 'More focused than a wiki, faster than a video. Follow one actionable route for completion, then open only the boss advice you need.'}
+      </p>
+      <div class="hero-actions">
+        <a class="button" href={route('/wukong/checklist/')}>{isZh ? '打开全收集路线' : 'Open the 100% route'} <span aria-hidden="true">→</span></a>
+        <a class="button secondary" href={route('/wukong/bosses/')}>{isZh ? '寻找 Boss 解法' : 'Find a boss solution'}</a>
+      </div>
+      <div class="hero-proof" aria-label={isZh ? '产品特点' : 'Product qualities'}>
+        <span>{isZh ? '无需注册' : 'No account'}</span>
+        <span>{isZh ? '浏览器本地保存' : 'Saved locally'}</span>
+        <span>{isZh ? '默认隐藏剧透' : 'Spoiler-safe by default'}</span>
+        <span>{isZh ? '中英文同步' : 'English + 中文'}</span>
+      </div>
+      <RouteStarter lang={lang} />
+    </div>
+  </section>
+
+  <section class="section shell">
+    <div class="section-head">
+      <p class="eyebrow">{isZh ? '不是又一本百科' : 'Not another encyclopedia'}</p>
+      <h2 class="section-title">{isZh ? '从“我漏了什么”到“下一步做什么”' : 'From “what did I miss?” to “what should I do next?”'}</h2>
+      <p class="lede">{isZh ? '本站围绕三种真实场景设计：推进、卡关、补漏。' : 'The site is organized around three real moments: advancing, getting stuck, and cleaning up.'}</p>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-card">
+        <span class="feature-number">01 · ROUTE</span>
+        <h3>{isZh ? '可执行全收集清单' : 'An actionable completion route'}</h3>
+        <p>{isZh ? '按章节、类型和状态筛选；标记易错过节点；随时导入导出进度。' : 'Filter by chapter, category, and status. Surface missables. Import or export progress anytime.'}</p>
+      </article>
+      <article class="feature-card">
+        <span class="feature-number">02 · SOLVE</span>
+        <h3>{isZh ? '一分钟读懂 Boss' : 'Understand a boss in one minute'}</h3>
+        <p>{isZh ? '准备项、三条核心规则、输出窗口和常见错误，先给答案，再给解释。' : 'Prep, three core rules, punish windows, and common mistakes—answer first, explanation second.'}</p>
+      </article>
+      <article class="feature-card">
+        <span class="feature-number">03 · ADAPT</span>
+        <h3>{isZh ? '能执行的构筑，不是堆表' : 'Builds you can actually pilot'}</h3>
+        <p>{isZh ? '每套构筑都说明适用场景、核心组件、战斗循环和替换方案。' : 'Every build explains when it works, what it needs, the combat loop, and practical swaps.'}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section shell">
+    <div class="progress-preview">
+      <div class="progress-orbit" aria-hidden="true"><div class="sun"><strong data-home-progress>0%</strong><small>{isZh ? '旅程完成' : 'journey complete'}</small></div></div>
+      <div class="progress-copy">
+        <p class="eyebrow">{isZh ? '你的进度，只属于你' : 'Your progress, yours alone'}</p>
+        <h2 class="section-title">{isZh ? '不注册，也能接着走。' : 'No sign-up. Pick up where you left off.'}</h2>
+        <p class="lede">{isZh ? '勾选状态只保存在当前浏览器，可导出为 JSON 备份。语言切换、筛选和进度使用同一份本地数据。' : 'Checkmarks stay in this browser and can be exported as a JSON backup. Language, filters, and progress all share the same local state.'}</p>
+        <ul>
+          <li>{isZh ? '不会读取或上传游戏存档' : 'Never reads or uploads your game save'}</li>
+          <li>{isZh ? '中英文切换不重置清单' : 'Switch languages without resetting anything'}</li>
+          <li>{isZh ? '下一步建议优先显示未完成目标' : 'Next-best-action jumps to an open objective'}</li>
+        </ul>
+        <div><a class="button" href={route('/wukong/checklist/')}>{isZh ? '继续我的路线' : 'Continue my route'} <span aria-hidden="true">→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section shell">
+    <div class="section-head split">
+      <div>
+        <p class="eyebrow">{isZh ? '重点 Boss 解法' : 'Priority boss solvers'}</p>
+        <h2 class="section-title">{isZh ? '看机制，不看十分钟铺垫。' : 'Read the mechanic, skip the ten-minute preamble.'}</h2>
+      </div>
+      <a class="button secondary" href={route('/wukong/bosses/')}>{isZh ? '查看全部 Boss' : 'View all bosses'}</a>
+    </div>
+    <BossGrid lang={lang} limit={6} />
+  </section>
+
+  <section class="section shell">
+    <div class="section-head split">
+      <div>
+        <p class="eyebrow">{isZh ? '构筑库' : 'Build library'}</p>
+        <h2 class="section-title">{isZh ? '围绕打法组织，而不是围绕装备截图。' : 'Organized by playstyle, not inventory screenshots.'}</h2>
+      </div>
+      <a class="button secondary" href={route('/wukong/builds/')}>{isZh ? '查看全部构筑' : 'View all builds'}</a>
+    </div>
+    <BuildGrid lang={lang} limit={3} />
+  </section>
+
+  <script>
+    try {
+      const parsed = JSON.parse(localStorage.getItem('bmr:v1:progress') || '{}');
+      const count = Array.isArray(parsed.completed) ? new Set(parsed.completed).size : 0;
+      const element = document.querySelector<HTMLElement>('[data-home-progress]');
+      if (element) element.textContent = `${Math.round(Math.min(count, 36) / 36 * 100)}%`;
+    } catch {}
+  </script>
+</BaseLayout>

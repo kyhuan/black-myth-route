@@ -1,0 +1,50 @@
+---
+import { localizePath, type Lang } from '@/lib/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+const target = localizePath('/wukong/checklist/', lang);
+---
+
+<form class="starter-card" data-route-starter data-target={target}>
+  <div class="starter-intro">
+    <strong>{isZh ? '从你所在的位置开始' : 'Start where you are'}</strong>
+    <span>{isZh ? '三项选择只用于预设筛选。' : 'These choices only preset your filters.'}</span>
+  </div>
+  <div class="field">
+    <label for="route-chapter">{isZh ? '当前章节' : 'Current chapter'}</label>
+    <select class="select" id="route-chapter" name="chapter">
+      {[1,2,3,4,5,6].map((chapter) => <option value={chapter}>{isZh ? `第 ${chapter} 回` : `Chapter ${chapter}`}</option>)}
+      <option value="7">{isZh ? '再入轮回' : 'New Cycle'}</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="route-cycle">{isZh ? '周目' : 'Journey'}</label>
+    <select class="select" id="route-cycle" name="cycle">
+      <option value="first">{isZh ? '首周目' : 'First journey'}</option>
+      <option value="new">{isZh ? '再入轮回' : 'New Cycle'}</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="route-spoiler">{isZh ? '剧透保护' : 'Spoiler safety'}</label>
+    <select class="select" id="route-spoiler" name="spoilers">
+      <option value="safe">{isZh ? '隐藏剧透' : 'Hide spoilers'}</option>
+      <option value="show">{isZh ? '显示全部' : 'Show everything'}</option>
+    </select>
+  </div>
+  <button class="button" type="submit">{isZh ? '规划我的路线' : 'Plan my route'} <span aria-hidden="true">→</span></button>
+</form>
+
+<script>
+  document.querySelector<HTMLFormElement>('[data-route-starter]')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const values = new FormData(form);
+    const params = new URLSearchParams();
+    params.set('chapter', String(values.get('chapter') || '1'));
+    params.set('spoilers', String(values.get('spoilers') || 'safe'));
+    try { localStorage.setItem('bmr:cycle', String(values.get('cycle') || 'first')); } catch {}
+    location.assign(`${form.dataset.target}?${params}`);
+  });
+</script>
+

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Tracker from '@/components/Tracker.astro';
+import { localizePath, type Lang } from '@/lib/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+---
+
+<BaseLayout
+  title={isZh ? '黑神话悟空全收集进度清单' : 'Black Myth: Wukong 100% Checklist'}
+  description={isZh ? '按章节追踪黑神话：悟空 Boss、支线、隐藏区域、关键物品和打坐点。支持易错过筛选、剧透保护与本地备份。' : 'Track Black Myth: Wukong bosses, quests, secrets, key items, and meditation spots by chapter, with missable filters and local backups.'}
+>
+  <header class="page-hero">
+    <div class="shell">
+      <nav class="crumbs" aria-label={isZh ? '面包屑' : 'Breadcrumb'}>
+        <span><a href={localizePath('/', lang)}>{isZh ? '首页' : 'Home'}</a></span>
+        <span>{isZh ? '全收集进度' : '100% Tracker'}</span>
+      </nav>
+      <p class="eyebrow">{isZh ? '推进 · 补漏 · 再入轮回' : 'Advance · Clean up · New Cycle'}</p>
+      <h1 class="page-title">{isZh ? '全收集路线清单' : 'The completion route'}</h1>
+      <p class="lede">{isZh ? '先标记你已经完成的内容，再用“下一个建议目标”继续。易错过项目会单独标出，剧透默认隐藏。' : 'Mark what you have done, then use Next Best Action to keep moving. Missables are called out; spoilers start hidden.'}</p>
+    </div>
+  </header>
+  <section class="section-tight shell">
+    <Tracker lang={lang} />
+  </section>
+</BaseLayout>
+

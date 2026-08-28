@@ -1,0 +1,24 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BuildGrid from '@/components/BuildGrid.astro';
+import { localizePath, type Lang } from '@/lib/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+---
+
+<BaseLayout
+  title={isZh ? '黑神话悟空实战构筑' : 'Black Myth: Wukong Builds'}
+  description={isZh ? '按打法组织的黑神话：悟空实战构筑，包含核心组件、战斗循环、适用 Boss 和替换方案。' : 'Practical Black Myth: Wukong builds organized by playstyle, with core pieces, combat loops, boss fit, and swaps.'}
+>
+  <header class="page-hero">
+    <div class="shell">
+      <nav class="crumbs" aria-label={isZh ? '面包屑' : 'Breadcrumb'}><span><a href={localizePath('/', lang)}>{isZh ? '首页' : 'Home'}</a></span><span>{isZh ? '构筑库' : 'Builds'}</span></nav>
+      <p class="eyebrow">{isZh ? '核心组件 · 战斗循环 · 灵活替换' : 'Core pieces · Combat loop · Practical swaps'}</p>
+      <h1 class="page-title">{isZh ? '能打出来的构筑' : 'Builds you can pilot'}</h1>
+      <p class="lede">{isZh ? '不假设你拥有完美装备。每套方案先解释怎么打，再解释缺一件时怎么换。' : 'No perfect inventory assumed. Each route explains how to play first, then what to swap when a piece is missing.'}</p>
+    </div>
+  </header>
+  <section class="section-tight shell"><BuildGrid lang={lang} /></section>
+</BaseLayout>
+

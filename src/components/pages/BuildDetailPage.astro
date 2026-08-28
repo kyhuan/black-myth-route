@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import type { Build } from '@/data/builds';
+import { localizePath, type Lang } from '@/lib/i18n';
+interface Props { lang: Lang; build: Build; }
+const { lang, build } = Astro.props;
+const isZh = lang === 'zh-cn';
+---
+
+<BaseLayout title={build.title[lang]} description={build.summary[lang]} type="article">
+  <header class="page-hero">
+    <div class="shell">
+      <nav class="crumbs" aria-label={isZh ? '面包屑' : 'Breadcrumb'}>
+        <span><a href={localizePath('/', lang)}>{isZh ? '首页' : 'Home'}</a></span>
+        <span><a href={localizePath('/wukong/builds/', lang)}>{isZh ? '构筑库' : 'Builds'}</a></span>
+        <span>{build.title[lang]}</span>
+      </nav>
+      <p class="eyebrow">{build.eyebrow[lang]}</p>
+      <h1 class="page-title">{build.title[lang]}</h1>
+      <p class="lede">{build.summary[lang]}</p>
+    </div>
+  </header>
+  <section class="section shell detail-grid">
+    <article class="detail-content">
+      <section class="detail-section"><p class="eyebrow">01 · FIT</p><h2>{isZh ? '适合什么场景' : 'Where it fits'}</h2><ul>{build.bestFor[lang].map((item) => <li>{item}</li>)}</ul></section>
+      <section class="detail-section"><p class="eyebrow">02 · CORE</p><h2>{isZh ? '核心组件' : 'Core pieces'}</h2><ul>{build.core[lang].map((item) => <li>{item}</li>)}</ul></section>
+      <section class="detail-section"><p class="eyebrow">03 · LOOP</p><h2>{isZh ? '战斗循环' : 'Combat loop'}</h2><ol class="numbered-list">{build.loop[lang].map((item) => <li>{item}</li>)}</ol></section>
+      <section class="detail-section"><p class="eyebrow">04 · SWAPS</p><h2>{isZh ? '替换与调整' : 'Swaps and adjustments'}</h2><ul>{build.swaps[lang].map((item) => <li>{item}</li>)}</ul></section>
+      <div class="warning-box">{isZh ? '构筑是决策框架，不是唯一答案。优先使用你真正熟悉的棍势和法术。' : 'A build is a decision framework, not a single correct answer. Favor the stance and spells you can execute reliably.'}</div>
+    </article>
+    <aside class="detail-aside">
+      <section class="aside-card"><h2>{isZh ? '推荐周目' : 'Recommended journey'}</h2><p class="aside-value">{build.cycle === 'first' ? (isZh ? '首周目' : 'First journey') : build.cycle === 'ng+' ? (isZh ? '再入轮回' : 'New Cycle') : (isZh ? '全周目' : 'Any journey')}</p></section>
+      <section class="aside-card"><h2>{isZh ? '使用原则' : 'Operating principle'}</h2><p class="muted">{isZh ? '先保证循环能稳定完成，再追求表面数值。' : 'Make the loop repeatable before chasing headline damage.'}</p></section>
+      <a class="button secondary" href={localizePath('/wukong/builds/', lang)}>← {isZh ? '返回构筑库' : 'All builds'}</a>
+    </aside>
+  </section>
+</BaseLayout>
+

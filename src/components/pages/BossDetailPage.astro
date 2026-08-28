@@ -1,0 +1,66 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import type { Boss } from '@/data/bosses';
+import { localizePath, siteUrl, type Lang } from '@/lib/i18n';
+interface Props { lang: Lang; boss: Boss; }
+const { lang, boss } = Astro.props;
+const isZh = lang === 'zh-cn';
+const description = boss.summary[lang];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: `${boss.name[lang]} ${isZh ? '解法' : 'boss guide'}`,
+  description,
+  inLanguage: isZh ? 'zh-CN' : 'en',
+  mainEntityOfPage: `${siteUrl}${localizePath(`/wukong/bosses/${boss.slug}/`, lang)}`,
+  author: { '@type': 'Organization', name: 'Black Myth Route' }
+};
+---
+
+<BaseLayout title={`${boss.name[lang]} ${isZh ? '解法' : 'Boss Guide'}`} description={description} type="article">
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <header class="page-hero">
+    <div class="shell">
+      <nav class="crumbs" aria-label={isZh ? '面包屑' : 'Breadcrumb'}>
+        <span><a href={localizePath('/', lang)}>{isZh ? '首页' : 'Home'}</a></span>
+        <span><a href={localizePath('/wukong/bosses/', lang)}>{isZh ? 'Boss 解法' : 'Boss Solver'}</a></span>
+        <span>{boss.name[lang]}</span>
+      </nav>
+      <p class="eyebrow">{isZh ? `第 ${boss.chapter} 回 · 难度 ${boss.difficulty}/5` : `Chapter ${boss.chapter} · Difficulty ${boss.difficulty}/5`}</p>
+      <h1 class="page-title">{boss.name[lang]}</h1>
+      <p class="lede">{boss.epithet[lang]}</p>
+    </div>
+  </header>
+  <section class="section shell detail-grid">
+    <article class="detail-content">
+      <div class="warning-box"><strong>{isZh ? '一句话解法：' : 'The short answer: '}</strong>{boss.summary[lang]}</div>
+      <section class="detail-section">
+        <p class="eyebrow">01 · PREP</p>
+        <h2>{isZh ? '开打前准备' : 'Before the attempt'}</h2>
+        <ul>{boss.prep[lang].map((item) => <li>{item}</li>)}</ul>
+      </section>
+      <section class="detail-section">
+        <p class="eyebrow">02 · RULES</p>
+        <h2>{isZh ? '三条核心规则' : 'Three rules that solve the fight'}</h2>
+        <ol class="numbered-list">{boss.rules[lang].map((item) => <li>{item}</li>)}</ol>
+      </section>
+      <section class="detail-section">
+        <p class="eyebrow">03 · PUNISH</p>
+        <h2>{isZh ? '稳定输出窗口' : 'Reliable punish windows'}</h2>
+        <ul>{boss.punish[lang].map((item) => <li>{item}</li>)}</ul>
+      </section>
+      <section class="detail-section">
+        <p class="eyebrow">04 · RESET</p>
+        <h2>{isZh ? '最常见的失败原因' : 'Most common run killers'}</h2>
+        <ul>{boss.mistakes[lang].map((item) => <li>{item}</li>)}</ul>
+      </section>
+      <div class="warning-box">{isZh ? '提示：版本更新可能改变数值，但动作识别、输出窗口和资源规划通常仍然适用。' : 'Note: patches can change numbers, while move recognition, punish windows, and resource planning usually remain useful.'}</div>
+    </article>
+    <aside class="detail-aside">
+      <section class="aside-card"><h2>{isZh ? '地点' : 'Location'}</h2><p class="aside-value">{boss.location[lang]}</p></section>
+      <section class="aside-card"><h2>{isZh ? '相对难度' : 'Relative difficulty'}</h2><div class="difficulty" aria-label={`${boss.difficulty}/5`}>{[1,2,3,4,5].map((level) => <i class:list={{ active: level <= boss.difficulty }}></i>)}</div></section>
+      <section class="aside-card"><h2>{isZh ? '标签' : 'Tags'}</h2><ul class="tag-list">{boss.tags[lang].map((tag) => <li class="pill">{tag}</li>)}</ul></section>
+      <a class="button secondary" href={localizePath('/wukong/bosses/', lang)}>← {isZh ? '返回 Boss 列表' : 'All boss solvers'}</a>
+    </aside>
+  </section>
+</BaseLayout>

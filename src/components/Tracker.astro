@@ -1,0 +1,234 @@
+---
+import { chapterLabels, objectives, type ObjectiveCategory } from '@/data/objectives';
+import type { Lang } from '@/lib/i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const isZh = lang === 'zh-cn';
+const categoryLabels: Record<ObjectiveCategory, Record<Lang, string>> = {
+  boss: { en: 'Boss', 'zh-cn': 'Boss' },
+  quest: { en: 'Quest', 'zh-cn': '支线' },
+  secret: { en: 'Secret', 'zh-cn': '隐藏' },
+  item: { en: 'Key item', 'zh-cn': '关键物品' },
+  meditation: { en: 'Meditation', 'zh-cn': '打坐' }
+};
+---
+
+<div class="tracker-layout" data-tracker data-lang={lang}>
+  <aside class="tracker-sidebar">
+    <section class="progress-panel" aria-labelledby="progress-title">
+      <h2 id="progress-title" class="sr-only">{isZh ? '完成进度' : 'Completion progress'}</h2>
+      <div class="progress-ring" data-progress-ring><span data-progress-percent>0%</span></div>
+      <div>
+        <strong data-progress-count>0 / {objectives.length}</strong>
+        <p class="progress-caption">{isZh ? '路线目标已完成' : 'route objectives complete'}</p>
+      </div>
+      <div class="sidebar-actions">
+        <button class="button small" type="button" data-next>{isZh ? '下一个建议目标' : 'Next best action'} <span aria-hidden="true">→</span></button>
+        <button class="button secondary small" type="button" data-export>{isZh ? '导出' : 'Export'}</button>
+        <button class="button secondary small" type="button" data-import-trigger>{isZh ? '导入' : 'Import'}</button>
+        <input class="sr-only" type="file" accept="application/json,.json" data-import />
+      </div>
+    </section>
+    <section class="control-panel">
+      <h2>{isZh ? '状态' : 'Status'}</h2>
+      <div class="segmented" data-status-filters>
+        <button class="filter-button" type="button" data-status="all" aria-pressed="true">{isZh ? '全部' : 'All'}</button>
+        <button class="filter-button" type="button" data-status="open" aria-pressed="false">{isZh ? '未完成' : 'Open'}</button>
+        <button class="filter-button" type="button" data-status="complete" aria-pressed="false">{isZh ? '已完成' : 'Complete'}</button>
+        <button class="filter-button" type="button" data-status="missable" aria-pressed="false">{isZh ? '易错过' : 'Missable'}</button>
+      </div>
+      <div class="toggle-row">
+        <span>{isZh ? '剧透保护' : 'Spoiler safety'}</span>
+        <button class="toggle" type="button" role="switch" aria-pressed="true" data-spoiler-toggle aria-label={isZh ? '切换剧透保护' : 'Toggle spoiler safety'}></button>
+      </div>
+      <button class="button ghost small" type="button" data-reset>{isZh ? '清空全部进度' : 'Reset all progress'}</button>
+    </section>
+    <section class="notice-card" style="padding: 18px;">
+      <p class="muted" style="font-size:.78rem;">{isZh ? '进度仅保存在此浏览器。更换设备前请先导出 JSON 备份。' : 'Progress is stored only in this browser. Export a JSON backup before changing devices.'}</p>
+    </section>
+  </aside>
+
+  <div class="tracker-main">
+    <div class="tracker-toolbar">
+      <label class="field">
+        <span class="sr-only">{isZh ? '搜索目标' : 'Search objectives'}</span>
+        <input class="input" type="search" placeholder={isZh ? '搜索名称或地点…' : 'Search name or location…'} data-search />
+      </label>
+      <label class="field">
+        <span class="sr-only">{isZh ? '选择章节' : 'Select chapter'}</span>
+        <select class="select" data-chapter-filter>
+          <option value="all">{isZh ? '全部章节' : 'All chapters'}</option>
+          {Object.entries(chapterLabels[lang]).map(([chapter, label]) => <option value={chapter}>{label}</option>)}
+        </select>
+      </label>
+      <label class="field">
+        <span class="sr-only">{isZh ? '选择分类' : 'Select category'}</span>
+        <select class="select" data-category>
+          <option value="all">{isZh ? '全部类型' : 'All categories'}</option>
+          {Object.entries(categoryLabels).map(([category, labels]) => <option value={category}>{labels[lang]}</option>)}
+        </select>
+      </label>
+    </div>
+    <p class="result-count" data-result-count></p>
+    <div class="objective-list" data-objective-list>
+      {objectives.map((objective) => (
+        <article
+          class="objective-card"
+          data-objective
+          data-id={objective.id}
+          data-chapter={objective.chapter}
+          data-category={objective.category}
+          data-missable={String(objective.missable)}
+          data-spoiler={String(objective.spoiler)}
+          data-safe="true"
+          data-search-text={`${objective.title[lang]} ${objective.location[lang]} ${objective.hint[lang]}`.toLocaleLowerCase()}
+          data-spoiler-label={isZh ? '剧透内容 · 关闭保护后查看' : 'Spoiler hidden · turn off safety to reveal'}
+        >
+          <input class="objective-check" type="checkbox" value={objective.id} aria-label={objective.spoiler ? (isZh ? '标记隐藏剧透目标为完成' : 'Mark hidden spoiler objective complete') : `${isZh ? '标记完成' : 'Mark complete'}: ${objective.title[lang]}`} />
+          <div class="objective-copy" aria-hidden={objective.spoiler ? 'true' : undefined}>
+            <p class="objective-location">{objective.location[lang]}</p>
+            <h3>{objective.title[lang]}</h3>
+            <p class="objective-hint">{objective.hint[lang]}</p>
+          </div>
+          <div class="objective-meta">
+            <span class="pill">{categoryLabels[objective.category][lang]}</span>
+            {objective.missable && <span class="pill danger">{isZh ? '易错过' : 'Missable'}</span>}
+          </div>
+        </article>
+      ))}
+    </div>
+    <div class="tracker-empty" data-empty hidden>{isZh ? '当前筛选下没有目标。试试清除搜索或切换章节。' : 'No objectives match these filters. Clear the search or try another chapter.'}</div>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-tracker]');
+  if (root) {
+    const lang = root.dataset.lang || 'en';
+    const isZh = lang === 'zh-cn';
+    const storageKey = 'bmr:v1:progress';
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-objective]')];
+    const validIds = new Set(cards.map((card) => card.dataset.id || ''));
+    const checkboxes = [...root.querySelectorAll<HTMLInputElement>('.objective-check')];
+    const search = root.querySelector<HTMLInputElement>('[data-search]');
+    const chapter = root.querySelector<HTMLSelectElement>('[data-chapter-filter]');
+    const category = root.querySelector<HTMLSelectElement>('[data-category]');
+    const empty = root.querySelector<HTMLElement>('[data-empty]');
+    const resultCount = root.querySelector<HTMLElement>('[data-result-count]');
+    const spoilerToggle = root.querySelector<HTMLButtonElement>('[data-spoiler-toggle]');
+    let status = 'all';
+    let completed = new Set<string>();
+    let spoilerSafe = true;
+
+    const toast = (message: string) => {
+      const element = document.querySelector<HTMLElement>('[data-toast]');
+      if (!element) return;
+      element.textContent = message;
+      element.dataset.show = 'true';
+      window.setTimeout(() => { element.dataset.show = 'false'; }, 2400);
+    };
+
+    const load = () => {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(storageKey) || '{}');
+        const values = Array.isArray(parsed.completed) ? parsed.completed : [];
+        completed = new Set(values.filter((id: unknown): id is string => typeof id === 'string' && validIds.has(id)));
+        spoilerSafe = localStorage.getItem('bmr:spoiler-safe') !== 'false';
+      } catch { completed = new Set(); }
+      const query = new URLSearchParams(location.search);
+      if (query.get('chapter') && chapter) chapter.value = query.get('chapter') || 'all';
+      if (query.get('spoilers') === 'show') spoilerSafe = false;
+    };
+
+    const persist = () => {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify({ version: 1, completed: [...completed], updatedAt: new Date().toISOString() }));
+        localStorage.setItem('bmr:spoiler-safe', String(spoilerSafe));
+      } catch { toast(isZh ? '浏览器阻止了本地保存。' : 'Your browser blocked local saving.'); }
+    };
+
+    const updateProgress = () => {
+      const percent = cards.length ? Math.round(completed.size / cards.length * 100) : 0;
+      const ring = root.querySelector<HTMLElement>('[data-progress-ring]');
+      if (ring) ring.style.setProperty('--progress', String(percent));
+      const percentLabel = root.querySelector<HTMLElement>('[data-progress-percent]');
+      const countLabel = root.querySelector<HTMLElement>('[data-progress-count]');
+      if (percentLabel) percentLabel.textContent = `${percent}%`;
+      if (countLabel) countLabel.textContent = `${completed.size} / ${cards.length}`;
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = completed.has(checkbox.value);
+        checkbox.closest<HTMLElement>('[data-objective]')?.setAttribute('data-complete', String(checkbox.checked));
+      });
+    };
+
+    const applyFilters = () => {
+      const term = (search?.value || '').trim().toLocaleLowerCase();
+      let visible = 0;
+      cards.forEach((card) => {
+        const id = card.dataset.id || '';
+        const statusMatch = status === 'all' || (status === 'open' && !completed.has(id)) || (status === 'complete' && completed.has(id)) || (status === 'missable' && card.dataset.missable === 'true');
+        const chapterMatch = !chapter || chapter.value === 'all' || card.dataset.chapter === chapter.value;
+        const categoryMatch = !category || category.value === 'all' || card.dataset.category === category.value;
+        const searchMatch = !term || (card.dataset.searchText || '').includes(term);
+        const show = statusMatch && chapterMatch && categoryMatch && searchMatch;
+        card.hidden = !show;
+        card.dataset.safe = String(spoilerSafe);
+        if (card.dataset.spoiler === 'true') card.querySelector('.objective-copy')?.setAttribute('aria-hidden', String(spoilerSafe));
+        if (show) visible += 1;
+      });
+      if (empty) empty.hidden = visible > 0;
+      if (resultCount) resultCount.textContent = isZh ? `显示 ${visible} / ${cards.length} 个目标` : `Showing ${visible} of ${cards.length} objectives`;
+      spoilerToggle?.setAttribute('aria-pressed', String(spoilerSafe));
+    };
+
+    load();
+    updateProgress();
+    applyFilters();
+
+    checkboxes.forEach((checkbox) => checkbox.addEventListener('change', () => {
+      if (checkbox.checked) completed.add(checkbox.value); else completed.delete(checkbox.value);
+      persist(); updateProgress(); applyFilters();
+    }));
+    search?.addEventListener('input', applyFilters);
+    chapter?.addEventListener('change', applyFilters);
+    category?.addEventListener('change', applyFilters);
+    root.querySelectorAll<HTMLButtonElement>('[data-status]').forEach((button) => button.addEventListener('click', () => {
+      status = button.dataset.status || 'all';
+      root.querySelectorAll<HTMLButtonElement>('[data-status]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      applyFilters();
+    }));
+    spoilerToggle?.addEventListener('click', () => { spoilerSafe = !spoilerSafe; persist(); applyFilters(); });
+    root.querySelector<HTMLButtonElement>('[data-next]')?.addEventListener('click', () => {
+      const next = cards.find((card) => !card.hidden && !completed.has(card.dataset.id || ''));
+      if (next) next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      else toast(isZh ? '当前筛选中的目标都完成了。' : 'Everything in the current filter is complete.');
+    });
+    root.querySelector<HTMLButtonElement>('[data-export]')?.addEventListener('click', () => {
+      const payload = { product: 'Black Myth Route', version: 1, completed: [...completed], exportedAt: new Date().toISOString() };
+      const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }));
+      const anchor = document.createElement('a');
+      anchor.href = url; anchor.download = `black-myth-route-${new Date().toISOString().slice(0,10)}.json`; anchor.click();
+      URL.revokeObjectURL(url);
+      toast(isZh ? '进度备份已导出。' : 'Progress backup exported.');
+    });
+    const importInput = root.querySelector<HTMLInputElement>('[data-import]');
+    root.querySelector<HTMLButtonElement>('[data-import-trigger]')?.addEventListener('click', () => importInput?.click());
+    importInput?.addEventListener('change', async () => {
+      const file = importInput.files?.[0];
+      if (!file) return;
+      try {
+        const parsed = JSON.parse(await file.text());
+        if (!Array.isArray(parsed.completed)) throw new Error('invalid');
+        completed = new Set(parsed.completed.filter((id: unknown): id is string => typeof id === 'string' && validIds.has(id)));
+        persist(); updateProgress(); applyFilters();
+        toast(isZh ? '进度已导入。' : 'Progress imported.');
+      } catch { toast(isZh ? '无法读取这个备份文件。' : 'That backup file could not be read.'); }
+      importInput.value = '';
+    });
+    root.querySelector<HTMLButtonElement>('[data-reset]')?.addEventListener('click', () => {
+      if (!confirm(isZh ? '确定清空全部进度吗？建议先导出备份。' : 'Reset all progress? Export a backup first if needed.')) return;
+      completed.clear(); persist(); updateProgress(); applyFilters();
+      toast(isZh ? '进度已清空。' : 'Progress reset.');
+    });
+  }
+</script>
