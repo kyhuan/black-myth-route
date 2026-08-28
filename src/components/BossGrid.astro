@@ -5,11 +5,12 @@ interface Props { lang: Lang; limit?: number; }
 const { lang, limit } = Astro.props;
 const list = typeof limit === 'number' ? bosses.slice(0, limit) : bosses;
 const isZh = lang === 'zh-cn';
+const chapterMarks = isZh ? ['','壹','贰','叁','肆','伍','陆'] : ['','I','II','III','IV','V','VI'];
 ---
 
 <div class="card-grid">
   {list.map((boss) => (
-    <a class="boss-card" href={localizePath(`/wukong/bosses/${boss.slug}/`, lang)}>
+    <a class="boss-card" data-chapter-mark={chapterMarks[boss.chapter]} href={localizePath(`/wukong/bosses/${boss.slug}/`, lang)}>
       <div class="card-top">
         <span class="card-chapter">{isZh ? `第 ${boss.chapter} 回` : `Chapter ${boss.chapter}`}</span>
         <h2>{boss.name[lang]}</h2>
@@ -25,4 +26,3 @@ const isZh = lang === 'zh-cn';
     </a>
   ))}
 </div>
-

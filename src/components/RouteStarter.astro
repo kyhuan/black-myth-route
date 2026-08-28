@@ -8,8 +8,9 @@ const target = localizePath('/wukong/checklist/', lang);
 
 <form class="starter-card" data-route-starter data-target={target}>
   <div class="starter-intro">
-    <strong>{isZh ? '从你所在的位置开始' : 'Start where you are'}</strong>
-    <span>{isZh ? '三项选择只用于预设筛选。' : 'These choices only preset your filters.'}</span>
+    <span class="starter-seal" aria-hidden="true">路</span>
+    <div><strong>{isZh ? '从你所在的位置开始' : 'Start where you are'}</strong>
+    <span>{isZh ? '择章 · 定周目 · 避剧透' : 'Choose chapter · cycle · spoiler level'}</span></div>
   </div>
   <div class="field">
     <label for="route-chapter">{isZh ? '当前章节' : 'Current chapter'}</label>
@@ -32,7 +33,7 @@ const target = localizePath('/wukong/checklist/', lang);
       <option value="show">{isZh ? '显示全部' : 'Show everything'}</option>
     </select>
   </div>
-  <button class="button" type="submit">{isZh ? '规划我的路线' : 'Plan my route'} <span aria-hidden="true">→</span></button>
+  <button class="button starter-submit" type="submit">{isZh ? '启程' : 'Begin route'} <span aria-hidden="true">→</span></button>
 </form>
 
 <script>
@@ -47,4 +48,3 @@ const target = localizePath('/wukong/checklist/', lang);
     location.assign(`${form.dataset.target}?${params}`);
   });
 </script>
-

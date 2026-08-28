@@ -25,25 +25,29 @@ const jsonLd = {
 <BaseLayout description={description}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <section class="hero">
+    <div class="hero-rune" aria-hidden="true">
+      <svg viewBox="0 0 240 240"><circle cx="120" cy="120" r="104"/><circle cx="120" cy="120" r="82"/><path d="M120 16v31M120 193v31M16 120h31M193 120h31M46 46l22 22M172 172l22 22M194 46l-22 22M68 172l-22 22"/><path d="M80 139c20-8 30-25 34-54 10 22 27 37 51 43M88 78c17 6 27 19 32 39 8-22 20-34 38-39"/></svg>
+    </div>
+    <div class="hero-inscription" aria-hidden="true"><span>{isZh ? '天命人路线志' : 'DESTINED'}</span><i></i><span>{isZh ? '甲辰录' : 'ROUTE ARCHIVE'}</span></div>
     <div class="shell hero-content">
-      <p class="eyebrow">{isZh ? '黑神话：悟空 · 非官方路线工具' : 'Black Myth: Wukong · Unofficial route companion'}</p>
+      <p class="eyebrow hero-kicker"><span class="mini-seal" aria-hidden="true">命</span>{isZh ? '黑神话：悟空 · 非官方路线工具' : 'Black Myth: Wukong · Unofficial route companion'}</p>
       <h1 class="display">
-        {isZh ? <>走完天命，<br/><em>不漏一程。</em></> : <>Finish the journey.<br/><em>Miss nothing.</em></>}
+        {isZh ? <>踏遍六回，<br/><em>不负天命。</em></> : <>Chart every path.<br/><em>Defy every trial.</em></>}
       </h1>
       <p class="lede">
         {isZh
-          ? '比百科更聚焦，比视频更快。用一条可执行路线完成收集，在卡关时只看真正有用的解法。'
-          : 'More focused than a wiki, faster than a video. Follow one actionable route for completion, then open only the boss advice you need.'}
+          ? '一条真正能走的天命路线：记收集、查遗漏、破强敌。少翻十页百科，多打一场漂亮的胜仗。'
+          : 'One route through the destined journey: track secrets, recover missables, and break impossible fights without ten tabs of noise.'}
       </p>
       <div class="hero-actions">
         <a class="button" href={route('/wukong/checklist/')}>{isZh ? '打开全收集路线' : 'Open the 100% route'} <span aria-hidden="true">→</span></a>
         <a class="button secondary" href={route('/wukong/bosses/')}>{isZh ? '寻找 Boss 解法' : 'Find a boss solution'}</a>
       </div>
       <div class="hero-proof" aria-label={isZh ? '产品特点' : 'Product qualities'}>
-        <span>{isZh ? '无需注册' : 'No account'}</span>
-        <span>{isZh ? '浏览器本地保存' : 'Saved locally'}</span>
-        <span>{isZh ? '默认隐藏剧透' : 'Spoiler-safe by default'}</span>
-        <span>{isZh ? '中英文同步' : 'English + 中文'}</span>
+        <span><b>06</b>{isZh ? '主线章节' : 'chapters charted'}</span>
+        <span><b>36</b>{isZh ? '关键节点' : 'route milestones'}</span>
+        <span><b>15</b>{isZh ? '强敌解法' : 'boss solvers'}</span>
+        <span><b>∞</b>{isZh ? '本地保存' : 'local saves'}</span>
       </div>
       <RouteStarter lang={lang} />
     </div>
@@ -57,16 +61,19 @@ const jsonLd = {
     </div>
     <div class="feature-grid">
       <article class="feature-card">
+        <svg class="feature-sigil" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 48c12-3 15-16 22-26 5-8 12-10 22-6M16 42c8 0 12 3 15 10M42 12l5 4-4 5"/><circle cx="10" cy="48" r="3"/><circle cx="54" cy="16" r="3"/></svg>
         <span class="feature-number">01 · ROUTE</span>
         <h3>{isZh ? '可执行全收集清单' : 'An actionable completion route'}</h3>
         <p>{isZh ? '按章节、类型和状态筛选；标记易错过节点；随时导入导出进度。' : 'Filter by chapter, category, and status. Surface missables. Import or export progress anytime.'}</p>
       </article>
       <article class="feature-card">
+        <svg class="feature-sigil" viewBox="0 0 64 64" aria-hidden="true"><path d="M11 31c6-12 13-18 21-18s15 6 21 18c-6 13-13 20-21 20S17 44 11 31Z"/><path d="M23 30c3-3 6-5 9-5s6 2 9 5c-2 6-5 9-9 9s-7-3-9-9Z"/><path d="M32 13V6M13 20l-6-4M51 20l6-4"/></svg>
         <span class="feature-number">02 · SOLVE</span>
         <h3>{isZh ? '一分钟读懂 Boss' : 'Understand a boss in one minute'}</h3>
         <p>{isZh ? '准备项、三条核心规则、输出窗口和常见错误，先给答案，再给解释。' : 'Prep, three core rules, punish windows, and common mistakes—answer first, explanation second.'}</p>
       </article>
       <article class="feature-card">
+        <svg class="feature-sigil" viewBox="0 0 64 64" aria-hidden="true"><path d="m16 48 32-32M12 43l9 9M43 12l9 9"/><path d="M26 12c3 2 5 5 6 9M38 52c-3-2-5-5-6-9"/></svg>
         <span class="feature-number">03 · ADAPT</span>
         <h3>{isZh ? '能执行的构筑，不是堆表' : 'Builds you can actually pilot'}</h3>
         <p>{isZh ? '每套构筑都说明适用场景、核心组件、战斗循环和替换方案。' : 'Every build explains when it works, what it needs, the combat loop, and practical swaps.'}</p>
