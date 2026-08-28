@@ -63,15 +63,7 @@ const socialImage = new URL(image, siteUrl);
         if (isRootVisit && preferred === 'zh-cn') location.replace('/zh-cn/' + location.search + location.hash);
       } catch {}
     </script>
-    {import.meta.env.PROD && (
-      <>
-        <script is:inline async src="https://plausible.shipsolo.io/js/pa-mvleIyUL0nBdIByN-f2fV.js"></script>
-        <script is:inline>
-          window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-          plausible.init()
-        </script>
-      </>
-    )}
+    {import.meta.env.PROD && <script is:inline defer data-domain="blackmythroute.cc" src="https://plausible.shipsolo.io/js/script.js"></script>}
   </head>
   <body>
     <a class="skip-link" href="#main">{lang === 'zh-cn' ? '跳到正文' : 'Skip to content'}</a>
