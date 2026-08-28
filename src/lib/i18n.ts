@@ -2,6 +2,7 @@ export type Lang = 'en' | 'zh-cn';
 
 export const siteName = 'Black Myth Route';
 export const siteUrl = 'https://blackmythroute.cc';
+export const repositoryUrl = 'https://github.com/kyhuan/black-myth-route';
 
 export function getLangFromUrl(url: URL): Lang {
   return url.pathname === '/zh-cn' || url.pathname.startsWith('/zh-cn/') ? 'zh-cn' : 'en';
@@ -59,4 +60,3 @@ const dictionary = {
 export function t(lang: Lang) {
   return dictionary[lang];
 }
-

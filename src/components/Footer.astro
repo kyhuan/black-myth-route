@@ -1,5 +1,5 @@
 ---
-import { localizePath, t, type Lang } from '@/lib/i18n';
+import { localizePath, repositoryUrl, t, type Lang } from '@/lib/i18n';
 interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const copy = t(lang);
@@ -17,6 +17,7 @@ const route = (path: string) => localizePath(path, lang);
       <nav class="footer-links" aria-label={lang === 'zh-cn' ? '页脚导航' : 'Footer navigation'}>
         <a href={route('/wukong/checklist/')}>{copy.navTracker}</a>
         <a href={route('/wukong/bosses/')}>{copy.navBosses}</a>
+        <a href={repositoryUrl} rel="me">GitHub</a>
         <a href={route('/privacy/')}>{copy.privacy}</a>
         <a href={route('/disclaimer/')}>{copy.disclaimer}</a>
       </nav>
@@ -27,4 +28,3 @@ const route = (path: string) => localizePath(path, lang);
     </div>
   </div>
 </footer>
-
