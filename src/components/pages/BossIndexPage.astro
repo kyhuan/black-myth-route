@@ -21,8 +21,76 @@ const isZh = lang === 'zh-cn';
       <p class="lede">{isZh ? '每页都压缩成开打前真正需要的内容。难度是本站相对评估，不代表唯一打法。' : 'Each page is compressed to what matters before another attempt. Difficulty is our relative estimate, never the only valid approach.'}</p>
     </div>
   </header>
-  <section class="section-tight shell">
+  <section class="section-tight shell" data-boss-library data-language={lang}>
+    <form class="boss-filters" role="search" hidden>
+      <label>{isZh ? '搜索 Boss' : 'Search bosses'}
+        <input type="search" name="q" placeholder={isZh ? '例如：虎先锋 / Tiger Vanguard' : 'Try Tiger Vanguard or 虎先锋'} autocomplete="off" />
+      </label>
+      <label>{isZh ? '章节' : 'Chapter'}
+        <select name="chapter">
+          <option value="">{isZh ? '全部章节' : 'All chapters'}</option>
+          {[1,2,3,4,5,6].map(chapter => <option value={chapter}>{isZh ? `第 ${chapter} 回` : `Chapter ${chapter}`}</option>)}
+        </select>
+      </label>
+      <button class="button secondary" type="reset">{isZh ? '重置筛选' : 'Reset filters'}</button>
+      <p class="boss-results" role="status" aria-live="polite" aria-atomic="true"></p>
+    </form>
+    <p class="boss-empty" hidden>{isZh ? '没有匹配的 Boss。试试中英文名称，或重置章节筛选。' : 'No matching bosses. Try an English or Chinese name, or reset the chapter filter.'}</p>
     <BossGrid lang={lang} />
   </section>
 </BaseLayout>
 
+<style>
+  .boss-filters { display: grid; grid-template-columns: minmax(0, 1fr) 180px auto; gap: 18px; align-items: end; padding: 24px; margin-bottom: 28px; border: 1px solid var(--line); background: var(--ink-900); }
+  .boss-filters[hidden], .boss-empty[hidden] { display: none; }
+  label { display: grid; gap: 8px; color: var(--gold-300); font-size: .9rem; }
+  input, select { width: 100%; min-width: 0; min-height: 48px; padding: 10px 12px; border: 1px solid var(--line-strong); background: var(--ink-950); color: var(--paper-50); }
+  .boss-results { grid-column: 1 / -1; color: var(--paper-300); font-size: .9rem; }
+  .boss-empty { padding: 32px; border: 1px dashed var(--line-strong); margin-bottom: 24px; }
+  :global([data-boss-library] .boss-card[hidden]) { display: none; }
+  @media (max-width: 640px) { .boss-filters { grid-template-columns: 1fr; padding: 18px; } }
+</style>
+
+<script>
+  const library = document.querySelector<HTMLElement>('[data-boss-library]');
+  if (library) {
+    const form = library.querySelector<HTMLFormElement>('form')!;
+    const search = form.querySelector<HTMLInputElement>('input')!;
+    const chapter = form.querySelector<HTMLSelectElement>('select')!;
+    const cards = [...library.querySelectorAll<HTMLAnchorElement>('[data-boss-search]')];
+    const status = form.querySelector<HTMLElement>('[role="status"]')!;
+    const empty = library.querySelector<HTMLElement>('.boss-empty')!;
+    const normalize = (value: string) => value.normalize('NFKC').toLowerCase().replace(/-/g, ' ').trim();
+    const filter = (save: boolean) => {
+      const words = normalize(search.value).split(/\s+/).filter(Boolean);
+      let count = 0;
+      for (const card of cards) {
+        card.hidden = !(words.every(word => normalize(card.dataset.bossSearch || '').includes(word)) && (!chapter.value || card.dataset.bossChapter === chapter.value));
+        if (!card.hidden) count++;
+      }
+      status.textContent = library.dataset.language === 'zh-cn' ? `找到 ${count} / ${cards.length} 位 Boss` : `${count} of ${cards.length} bosses`;
+      empty.hidden = count !== 0;
+      if (save) {
+        const url = new URL(location.href);
+        for (const [key, value] of [['q', search.value.trim()], ['chapter', chapter.value]]) {
+          if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
+        }
+        history.replaceState(null, '', url);
+      }
+    };
+    const restore = () => {
+      const params = new URLSearchParams(location.search);
+      search.value = params.get('q') || '';
+      const value = params.get('chapter') || '';
+      chapter.value = /^[1-6]$/.test(value) ? value : '';
+      filter(false);
+    };
+    form.hidden = false;
+    restore();
+    form.addEventListener('submit', event => { event.preventDefault(); filter(true); });
+    search.addEventListener('input', () => filter(true));
+    chapter.addEventListener('change', () => filter(true));
+    form.addEventListener('reset', () => { search.value = ''; chapter.value = ''; filter(true); });
+    window.addEventListener('popstate', restore);
+  }
+</script>

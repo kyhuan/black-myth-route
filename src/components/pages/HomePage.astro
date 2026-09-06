@@ -121,11 +121,15 @@ const jsonLd = {
   </section>
 
   <script>
-    try {
-      const parsed = JSON.parse(localStorage.getItem('bmr:v1:progress') || '{}');
-      const count = Array.isArray(parsed.completed) ? new Set(parsed.completed).size : 0;
+    import { objectives } from '@/data/objectives';
+    import { parseProgress, completionPercent } from '@/lib/progress';
+    const updateHomeProgress = () => { try {
+      const parsed = parseProgress(localStorage.getItem('bmr:v1:progress'), new Set(objectives.map(item => item.id)));
       const element = document.querySelector<HTMLElement>('[data-home-progress]');
-      if (element) element.textContent = `${Math.round(Math.min(count, 36) / 36 * 100)}%`;
-    } catch {}
+      if (element) element.textContent = `${completionPercent(parsed.completed.length, objectives.length)}%`;
+    } catch {} };
+    updateHomeProgress();
+    window.addEventListener('pageshow', updateHomeProgress);
+    window.addEventListener('storage', updateHomeProgress);
   </script>
 </BaseLayout>
